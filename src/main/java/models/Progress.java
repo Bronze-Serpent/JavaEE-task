@@ -1,0 +1,22 @@
+package models;
+
+public class Progress
+{
+    private final IDToken token;
+    private final long score;
+    private final long maxScore;
+
+
+    public Progress(IDToken token, long score, long maxScore)
+    {
+        this.token = token;
+        this.score = score;
+        this.maxScore = maxScore;
+    }
+
+    public IDToken getToken() {return token;}
+
+    public long getScore() {return score;}
+
+    public long getMaxScore() {return maxScore;}
+}
