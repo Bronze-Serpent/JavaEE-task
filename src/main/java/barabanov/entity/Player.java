@@ -1,4 +1,4 @@
-package models;
+package barabanov.entity;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -23,6 +23,13 @@ public class Player
         this.nickname = nickname;
     }
 
+    public void addProgress(List<Progress> progresses) { this.progresses.addAll(progresses); }
+
+    public void addCurrency(List<Currency> currencies) { this.currencies.addAll(currencies); }
+
+    public void addItem(List<Item> items) { this.items.addAll(items); }
+
+    public void setNickname(String nickname) { this.nickname = nickname; }
 
     public void addProgress(Progress prs)
     {
@@ -38,8 +45,6 @@ public class Player
     {
         items.add(item);
     }
-
-    public void setNickname(String nickname) {this.nickname = nickname;}
 
     public long getPlayerId() {return playerId;}
 

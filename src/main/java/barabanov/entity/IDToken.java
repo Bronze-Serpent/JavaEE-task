@@ -1,4 +1,4 @@
-package models;
+package barabanov.entity;
 
 public class IDToken
 {
