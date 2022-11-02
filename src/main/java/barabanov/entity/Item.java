@@ -14,6 +14,17 @@ public class Item
         this.level = level;
     }
 
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + token.getId() +
+                ", playerId=" + token.getPlayerId() +
+                ", resourceId=" + token.getResourceId() +
+                ", count=" + count +
+                ", level=" + level +
+                '}';
+    }
+
     public IDToken getToken() {return token;}
 
     public long getCount() {return count;}

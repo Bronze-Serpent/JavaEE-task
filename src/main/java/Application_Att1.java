@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class Application
+public class Application_Att1
 {
 
     public static void main(String[] args) throws IOException, ParseException, SQLException

@@ -1,8 +1,8 @@
 package barabanov.ORM;
 
 import barabanov.entity.Player;
-import barabanov.DBConnection;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,11 +13,19 @@ import java.util.List;
 public class DAOPlayerJDBC implements DAOPlayer
 {
 
+    private final Connection dbConnection;
+
+
+    public DAOPlayerJDBC(Connection connection)
+    {
+        this.dbConnection = connection;
+    }
+
 
     @Override
     public void create(Player val) throws SQLException
     {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                     INSERT INTO players (playerId, nickname)
                     VALUES (?, ?)
                     """)) {
@@ -32,7 +40,7 @@ public class DAOPlayerJDBC implements DAOPlayer
     @Override
     public Player readById(long id) throws SQLException
     {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                 SELECT *
                 FROM players
                 WHERE playerId = ?
@@ -50,7 +58,7 @@ public class DAOPlayerJDBC implements DAOPlayer
     @Override
     public void update(Player val) throws SQLException
     {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                     UPDATE players
                     SET nickname = ?
                     WHERE playerId = ?
@@ -64,13 +72,13 @@ public class DAOPlayerJDBC implements DAOPlayer
 
 
     @Override
-    public void delete(Player val) throws SQLException
+    public void delete(long id) throws SQLException
     {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                     DELETE FROM players
                     WHERE playerId = ?
                     """)) {
-            statement.setLong(1, val.getPlayerId());
+            statement.setLong(1, id);
 
             statement.execute();
         }
@@ -82,7 +90,7 @@ public class DAOPlayerJDBC implements DAOPlayer
     {
         List<Player> players = new LinkedList<>();
 
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                 SELECT *
                 FROM players
             """)) {

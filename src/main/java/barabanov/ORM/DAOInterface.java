@@ -12,5 +12,5 @@ public interface DAOInterface<T>
 
     void update(T val) throws SQLException;
 
-    void delete(T val) throws SQLException;
+    void delete(long id) throws SQLException;
 }

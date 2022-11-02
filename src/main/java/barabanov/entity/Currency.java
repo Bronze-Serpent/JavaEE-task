@@ -14,6 +14,17 @@ public class Currency
         this.count = count;
     }
 
+    @Override
+    public String toString() {
+        return "Currency{" +
+                "id=" + token.getId() +
+                ", playerId=" + token.getPlayerId() +
+                ", resourceId=" + token.getResourceId() +
+                ", name='" + name + '\'' +
+                ", count=" + count +
+                '}';
+    }
+
     public IDToken getToken() {return token;}
 
     public String getName() {return name;}

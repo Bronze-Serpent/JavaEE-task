@@ -2,8 +2,8 @@ package barabanov.ORM;
 
 import barabanov.entity.Currency;
 import barabanov.entity.IDToken;
-import barabanov.DBConnection;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,10 +14,19 @@ import java.util.List;
 public class DAOCurrencyJDBC implements DAOCurrency
 {
 
+    private final Connection dbConnection;
+
+
+    public DAOCurrencyJDBC(Connection connection)
+    {
+        this.dbConnection = connection;
+    }
+
+
     @Override
     public void create(Currency val) throws SQLException
     {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                     INSERT INTO currencies (id, playerId, resourceID, name, count)
                     VALUES (?, ?, ?, ?, ?)
                     """)) {
@@ -35,7 +44,7 @@ public class DAOCurrencyJDBC implements DAOCurrency
     @Override
     public Currency readById(long id) throws SQLException
     {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                 SELECT *
                 FROM currencies
                 WHERE id = ?
@@ -54,7 +63,7 @@ public class DAOCurrencyJDBC implements DAOCurrency
     @Override
     public void update(Currency val) throws SQLException
     {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                     UPDATE currencies
                     SET playerId = ?, resourceID = ?, name = ?, count = ?
                     WHERE id = ?
@@ -71,12 +80,12 @@ public class DAOCurrencyJDBC implements DAOCurrency
 
 
     @Override
-    public void delete(Currency val) throws SQLException {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+    public void delete(long id) throws SQLException {
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                     DELETE FROM currencies
                     WHERE id = ?
                     """)) {
-            statement.setLong(1, val.getToken().getId());
+            statement.setLong(1, id);
 
             statement.execute();
         }
@@ -88,7 +97,7 @@ public class DAOCurrencyJDBC implements DAOCurrency
     {
         List<Currency>  currencies = new LinkedList<>();
 
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                 SELECT *
                 FROM currencies
                 WHERE playerID = ?

@@ -23,13 +23,27 @@ public class Player
         this.nickname = nickname;
     }
 
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "playerId=" + playerId +
+                ", nickname='" + nickname + '\'' +
+                '}';
+    }
+
+
+    public void deleteItemWithId(long id) { items.removeIf(item -> item.getToken().getId() == id); }
+
+    public void deleteCurrencyWithId(long id) { currencies.removeIf(currency -> currency.getToken().getId() == id); }
+
+    public void deleteProgressWithId(long id) { progresses.removeIf(progress -> progress.getToken().getId() == id); }
+
     public void addProgress(List<Progress> progresses) { this.progresses.addAll(progresses); }
 
     public void addCurrency(List<Currency> currencies) { this.currencies.addAll(currencies); }
 
     public void addItem(List<Item> items) { this.items.addAll(items); }
-
-    public void setNickname(String nickname) { this.nickname = nickname; }
 
     public void addProgress(Progress prs)
     {
@@ -45,6 +59,8 @@ public class Player
     {
         items.add(item);
     }
+
+    public void setNickname(String nickname) { this.nickname = nickname; }
 
     public long getPlayerId() {return playerId;}
 

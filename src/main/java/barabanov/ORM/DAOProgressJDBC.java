@@ -1,9 +1,9 @@
 package barabanov.ORM;
 
-import barabanov.DBConnection;
 import barabanov.entity.IDToken;
 import barabanov.entity.Progress;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,10 +14,19 @@ import java.util.List;
 public class DAOProgressJDBC implements DAOProgress
 {
 
+    private final Connection dbConnection;
+
+
+    public DAOProgressJDBC(Connection connection)
+    {
+        this.dbConnection = connection;
+    }
+
+
     @Override
     public void create(Progress val) throws SQLException
     {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                     INSERT INTO progresses (id, playerId, resourceID, score, maxScore)
                     VALUES (?, ?, ?, ?, ?)
                     """)) {
@@ -35,7 +44,7 @@ public class DAOProgressJDBC implements DAOProgress
     @Override
     public Progress readById(long id) throws SQLException
     {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                 SELECT *
                 FROM progresses
                 WHERE id = ?
@@ -54,7 +63,7 @@ public class DAOProgressJDBC implements DAOProgress
     @Override
     public void update(Progress val) throws SQLException
     {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                     UPDATE progresses
                     SET playerId = ?, resourceID = ?, score = ?, maxScore = ?
                     WHERE id = ?
@@ -71,13 +80,13 @@ public class DAOProgressJDBC implements DAOProgress
 
 
     @Override
-    public void delete(Progress val) throws SQLException
+    public void delete(long id) throws SQLException
     {
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                     DELETE FROM progresses
                     WHERE id = ?
                     """)) {
-            statement.setLong(1, val.getToken().getId());
+            statement.setLong(1, id);
 
             statement.execute();
         }
@@ -89,7 +98,7 @@ public class DAOProgressJDBC implements DAOProgress
     {
         List<Progress> progresses = new LinkedList<>();
 
-        try (PreparedStatement statement = DBConnection.getConn().prepareStatement("""
+        try (PreparedStatement statement = dbConnection.prepareStatement("""
                 SELECT *
                 FROM progresses
                 WHERE playerID = ?

@@ -14,6 +14,17 @@ public class Progress
         this.maxScore = maxScore;
     }
 
+    @Override
+    public String toString() {
+        return "Progress{" +
+                "id=" + token.getId() +
+                ", playerId=" + token.getPlayerId() +
+                ", resourceId=" + token.getResourceId() +
+                ", score=" + score +
+                ", maxScore=" + maxScore +
+                '}';
+    }
+
     public IDToken getToken() {return token;}
 
     public long getScore() {return score;}

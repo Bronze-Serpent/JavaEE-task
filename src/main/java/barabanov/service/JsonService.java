@@ -18,7 +18,7 @@ public class JsonService
 
     // метод реализован через примитивную json-simple. Существуют гораздо менее многословные библиотеки
     // для парсинга json в Java. Однако json-simple использовалась для простоты восприятия т.к. это первая работа с json
-    public static List<Player> readPlayersWithAttributes(String fileName) throws IOException, ParseException
+    public List<Player> readPlayersWithAttributes(String fileName) throws IOException, ParseException
     {
         // считываем json файл
         JSONArray jsonArr = (JSONArray) new JSONParser().parse(new FileReader(fileName));
@@ -47,7 +47,7 @@ public class JsonService
     }
 
 
-    public static void writePlayersWithAttributes(List<Player> players, String fileName)
+    public void writePlayersWithAttributes(List<Player> players, String fileName)
     {
         try (FileWriter file = new FileWriter(fileName))
         {
