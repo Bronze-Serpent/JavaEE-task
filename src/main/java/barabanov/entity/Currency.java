@@ -17,9 +17,7 @@ public class Currency
     @Override
     public String toString() {
         return "Currency{" +
-                "id=" + token.getId() +
-                ", playerId=" + token.getPlayerId() +
-                ", resourceId=" + token.getResourceId() +
+                token +
                 ", name='" + name + '\'' +
                 ", count=" + count +
                 '}';

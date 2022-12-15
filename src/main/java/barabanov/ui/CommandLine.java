@@ -3,8 +3,10 @@ package barabanov.ui;
 
 import barabanov.ORM.*;
 import barabanov.entity.*;
-import barabanov.service.DBService;
-import barabanov.service.JsonService;
+import barabanov.service.CurrencyService;
+import barabanov.service.ItemService;
+import barabanov.service.PlayerService;
+import barabanov.service.ProgressService;
 import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
@@ -31,19 +33,17 @@ public class CommandLine
     {
         try (Connection dbConnection = DriverManager.getConnection(url, user, password))
         {
-            DBService dbService = new DBService(dbConnection);
-            JsonService jsonService = new JsonService();
+            CurrencyService currencyS = new CurrencyService(new DAOCurrencyJDBC(dbConnection));
+            ItemService itemS = new ItemService(new DAOItemJDBC(dbConnection));
+            ProgressService progressS = new ProgressService(new DAOProgressJDBC(dbConnection));
+            PlayerService playerS = new PlayerService(new DAOPlayerJDBC(dbConnection), currencyS, itemS, progressS);
 
-            List<Player> players = jsonService.readPlayersWithAttributes("./players.json");
+            List<Player> players = PlayerService.readFromJson("players.json");
 
-            //dbService.writePlayersWithAttributes(players);
+            //playerS.writeToDB(players);
             Map<Long, Player> idToPlayer = players.stream()
                     .collect(Collectors.toMap(Player::getPlayerId, p -> p));
 
-            DAOPlayer playerDB = new DAOPlayerJDBC(dbConnection);
-            DAOItem itemDB = new DAOItemJDBC(dbConnection);
-            DAOCurrency currencyDB = new DAOCurrencyJDBC(dbConnection);
-            DAOProgress progressDB = new DAOProgressJDBC(dbConnection);
 
             Scanner scanner = new Scanner(System.in);
 
@@ -60,13 +60,13 @@ public class CommandLine
                 if (checkResult.equals("checked"))
                     switch (cmdWords[1])
                     {
-                        case "player" -> executeCmdForPlayer(idToPlayer, cmdWords, playerDB, scanner);
+                        case "player" -> executeCmdForPlayer(idToPlayer, cmdWords, playerS, scanner);
 
-                        case "item" -> executeCmdForItem(idToPlayer, cmdWords, itemDB, scanner);
+                        case "item" -> executeCmdForItem(idToPlayer, cmdWords, itemS, scanner);
 
-                        case "currency" -> executeCmdForCurrency(idToPlayer, cmdWords, currencyDB, scanner);
+                        case "currency" -> executeCmdForCurrency(idToPlayer, cmdWords, currencyS, scanner);
 
-                        case "progress" -> executeCmdForProgress(idToPlayer, cmdWords, progressDB, scanner);
+                        case "progress" -> executeCmdForProgress(idToPlayer, cmdWords, progressS, scanner);
                     }
                 else
                     System.out.println(checkResult);
@@ -77,7 +77,7 @@ public class CommandLine
     }
 
 
-    private static void executeCmdForProgress(Map<Long, Player> idToPlayer, String[] cmdWords, DAOProgress progressDB, Scanner scanner)
+    private static void executeCmdForProgress(Map<Long, Player> idToPlayer, String[] cmdWords, ProgressService progressS, Scanner scanner)
     {
         try
         {
@@ -98,7 +98,7 @@ public class CommandLine
                                     Long.parseLong(progressArgs[1])), Long.parseLong(progressArgs[2]), Long.parseLong(progressArgs[3]));
 
                             idToPlayer.get(playerId).addProgress(progress);
-                            progressDB.create(progress);
+                            progressS.writeToDB(progress);
                         }
                         else
                             System.out.println("Неверно заданы аргументы progress");
@@ -106,7 +106,7 @@ public class CommandLine
                 }
 
                 case "read" -> {
-                    Progress progress = progressDB.readById(Long.parseLong(cmdWords[3]));
+                    Progress progress = progressS.readFromDB(Long.parseLong(cmdWords[3]));
                     System.out.println(progress);
                 }
 
@@ -119,7 +119,7 @@ public class CommandLine
                     else
                     {
                         idToPlayer.get(playerId).deleteProgressWithId(id);
-                        progressDB.delete(id);
+                        progressS.deleteDB(id);
                     }
                 }
             }
@@ -131,7 +131,7 @@ public class CommandLine
     }
 
 
-    private static void executeCmdForCurrency(Map<Long, Player> idToPlayer, String[] cmdWords, DAOCurrency currencyDB, Scanner scanner)
+    private static void executeCmdForCurrency(Map<Long, Player> idToPlayer, String[] cmdWords, CurrencyService currencyS, Scanner scanner)
     {
         try
         {
@@ -152,7 +152,7 @@ public class CommandLine
                                     Long.parseLong(currencyArgs[1])), currencyArgs[2], Long.parseLong(currencyArgs[3]));
 
                             idToPlayer.get(playerId).addCurrency(currency);
-                            currencyDB.create(currency);
+                            currencyS.writeToDB(currency);
                         }
                         else
                             System.out.println("Неверно заданы аргументы currency");
@@ -160,7 +160,7 @@ public class CommandLine
                 }
 
                 case "read" -> {
-                    Currency currency = currencyDB.readById(Long.parseLong(cmdWords[3]));
+                    Currency currency = currencyS.readFromDB(Long.parseLong(cmdWords[3]));
                     System.out.println(currency);
                 }
 
@@ -173,7 +173,7 @@ public class CommandLine
                     else
                     {
                         idToPlayer.get(playerId).deleteCurrencyWithId(id);
-                        currencyDB.delete(id);
+                        currencyS.deleteFromDB(id);
                     }
                 }
             }
@@ -185,7 +185,7 @@ public class CommandLine
     }
 
 
-    private static void executeCmdForItem(Map<Long, Player> idToPlayer, String[] cmdWords, DAOItem itemDB, Scanner scanner)
+    private static void executeCmdForItem(Map<Long, Player> idToPlayer, String[] cmdWords, ItemService itemS, Scanner scanner)
     {
         try {
             switch (cmdWords[0])
@@ -205,7 +205,7 @@ public class CommandLine
                                     Long.parseLong(itemArgs[1])), Long.parseLong(itemArgs[2]), Long.parseLong(itemArgs[3]));
 
                             idToPlayer.get(playerId).addItem(item);
-                            itemDB.create(item);
+                            itemS.writeToDB(item);
                         }
                         else
                             System.out.println("Неверно заданы аргументы item");
@@ -213,7 +213,7 @@ public class CommandLine
                 }
 
                 case "read" -> {
-                    Item item = itemDB.readById(Long.parseLong(cmdWords[3]));
+                    Item item = itemS.readFromDB(Long.parseLong(cmdWords[3]));
                     System.out.println(item);
                 }
 
@@ -226,7 +226,7 @@ public class CommandLine
                     else
                     {
                         idToPlayer.get(playerId).deleteItemWithId(id);
-                        itemDB.delete(id);
+                        itemS.deleteFromDB(id);
                     }
                 }
             }
@@ -238,7 +238,7 @@ public class CommandLine
     }
 
 
-    private static void executeCmdForPlayer(Map<Long, Player> idToPlayer, String[] cmdWords, DAOPlayer playerDB, Scanner scanner)
+    private static void executeCmdForPlayer(Map<Long, Player> idToPlayer, String[] cmdWords, PlayerService playerS, Scanner scanner)
     {
         try {
             switch (cmdWords[0])
@@ -251,7 +251,7 @@ public class CommandLine
                     {
                         Player pl = new Player(Long.parseLong(playerArgs[0]), playerArgs[1]);
 
-                        playerDB.create(pl);
+                        playerS.writeToDB(pl);
                         idToPlayer.put(pl.getPlayerId(), pl);
                     }
                     else
@@ -259,7 +259,7 @@ public class CommandLine
                 }
 
                 case "read" -> {
-                    Player pl = playerDB.readById(Long.parseLong(cmdWords[3]));
+                    Player pl = playerS.readFromDB(Long.parseLong(cmdWords[3]));
                     System.out.println(pl);
                 }
 
@@ -270,7 +270,7 @@ public class CommandLine
                     else
                     {
                         idToPlayer.get(playerId).setNickname(cmdWords[5]);
-                        playerDB.update(idToPlayer.get(playerId));
+                        playerS.updateDB(idToPlayer.get(playerId));
                     }
                 }
 
@@ -281,7 +281,7 @@ public class CommandLine
                         System.out.println("Player с playerId= " + cmdWords[3] + " не существует");
                     else
                     {
-                        playerDB.delete(playerId);
+                        playerS.deleteFromDB(playerId);
                         idToPlayer.remove(playerId);
                     }
                 }

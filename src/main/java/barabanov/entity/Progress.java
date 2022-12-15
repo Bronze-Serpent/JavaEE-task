@@ -17,9 +17,7 @@ public class Progress
     @Override
     public String toString() {
         return "Progress{" +
-                "id=" + token.getId() +
-                ", playerId=" + token.getPlayerId() +
-                ", resourceId=" + token.getResourceId() +
+                token +
                 ", score=" + score +
                 ", maxScore=" + maxScore +
                 '}';

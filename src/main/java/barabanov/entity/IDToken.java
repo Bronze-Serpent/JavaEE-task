@@ -13,6 +13,13 @@ public class IDToken
         this.resourceId = resourceId;
     }
 
+    @Override
+    public String toString() {
+        return "id=" + id +
+                ", playerId=" + playerId +
+                ", resourceId=" + resourceId;
+    }
+
     public long getId() {return id;}
 
     public long getPlayerId() {return playerId;}

@@ -86,9 +86,7 @@ public class Checker
 
                 if ( !isNumeric(commandWords[5]))
                     return "Неверно задан playerId " + commandWords[5] + ". playerId должен являться числом.";
-
             }
-
         }
         else
             return "Неопознанная команда: " + String.join(" ", commandWords);

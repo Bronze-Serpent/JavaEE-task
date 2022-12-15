@@ -17,9 +17,7 @@ public class Item
     @Override
     public String toString() {
         return "Item{" +
-                "id=" + token.getId() +
-                ", playerId=" + token.getPlayerId() +
-                ", resourceId=" + token.getResourceId() +
+                token +
                 ", count=" + count +
                 ", level=" + level +
                 '}';
