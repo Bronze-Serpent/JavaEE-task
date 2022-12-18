@@ -1,4 +1,4 @@
-package barabanov.ui;
+package barabanov.ui.console;
 
 
 import java.util.Arrays;
@@ -95,7 +95,7 @@ public class Checker
     }
 
 
-    private static boolean isNumeric(String s)
+    static boolean isNumeric(String s)
     {
         try
         {

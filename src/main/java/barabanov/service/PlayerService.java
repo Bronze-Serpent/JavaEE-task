@@ -8,15 +8,14 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import static barabanov.service.CurrencyService.currenciesToJson;
+import static barabanov.service.CurrencyService.currencyToJson;
 import static barabanov.service.CurrencyService.jsonToCurrencies;
-import static barabanov.service.ItemService.itemsToJson;
+import static barabanov.service.ItemService.itemToJson;
 import static barabanov.service.ItemService.jsonToItems;
 import static barabanov.service.ProgressService.jsonToProgresses;
 import static barabanov.service.ProgressService.progressesToJson;
@@ -70,7 +69,6 @@ public class PlayerService
     {
         for (Player player : players)
             writeToDB(player);
-
     }
 
 
@@ -89,25 +87,6 @@ public class PlayerService
     }
 
 
-    public static void writeToJson(List<Player> players, String fileName)
-    {
-        try (FileWriter file = new FileWriter(fileName))
-        {
-            JSONArray jsonPlayers = playersToJson(players);
-
-            for (Object objPlayer : jsonPlayers)
-            {
-                JSONObject jsonPlayer = (JSONObject) objPlayer;
-
-                file.write(jsonPlayer.toJSONString());
-            }
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-
-    }
-
     // метод реализован через примитивную json-simple. Существуют гораздо менее многословные библиотеки
     // для парсинга json в Java. Однако json-simple использовалась для простоты восприятия т.к. это первая работа с json
     public static List<Player> readFromJson(String fileName) throws IOException, ParseException
@@ -121,7 +100,7 @@ public class PlayerService
         for (Object obj : jsonArr)
         {
             JSONObject playerJson = (JSONObject) obj;
-            Player readPlayer = jsonToPlayer(playerJson);
+            Player readPlayer = new Player((long) playerJson.get("playerId"), (String) playerJson.get("nickname"));
 
             // записываем currencies для игрока
             readPlayer.addCurrency(jsonToCurrencies((JSONArray) playerJson.get("currencies")));
@@ -139,37 +118,27 @@ public class PlayerService
     }
 
 
-    public static Player jsonToPlayer(JSONObject playerJson)
-    {
-        return new Player((long) playerJson.get("playerId"), (String) playerJson.get("nickname"));
-    }
-
-
-    private static JSONArray playersToJson(List<Player> players)
-    {
-        JSONArray playersJsonView = new JSONArray();
-
-        for (Player player : players)
-        {
-            JSONObject jsonPlayer = playerToJson(player);
-            jsonPlayer.put("progresses", progressesToJson(player.getProgresses()));
-            jsonPlayer.put("currencies", currenciesToJson(player.getCurrencies()));
-            jsonPlayer.put("items", itemsToJson(player.getItems()));
-
-            playersJsonView.add(jsonPlayer);
-        }
-
-        return playersJsonView;
-    }
-
-
-    private static JSONObject playerToJson(Player player)
+    public static JSONObject playerToJson(Player player)
     {
         JSONObject jsonPlayer = new JSONObject();
 
         jsonPlayer.put("playerId", player.getPlayerId());
         jsonPlayer.put("nickname", player.getNickname());
+        jsonPlayer.put("progresses", progressesToJson(player.getProgresses()));
+        jsonPlayer.put("currencies", currencyToJson(player.getCurrencies()));
+        jsonPlayer.put("items", itemToJson(player.getItems()));
 
         return jsonPlayer;
+    }
+
+
+    private static JSONArray playerToJson(List<Player> players)
+    {
+        JSONArray playersJsonView = new JSONArray();
+
+        for (Player player : players)
+            playersJsonView.add(playerToJson(player));
+
+        return playersJsonView;
     }
 }

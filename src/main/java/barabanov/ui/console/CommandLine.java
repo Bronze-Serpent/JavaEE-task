@@ -1,4 +1,4 @@
-package barabanov.ui;
+package barabanov.ui.console;
 
 
 import barabanov.ORM.*;
@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-import static barabanov.ui.Checker.*;
+import static barabanov.ui.console.Checker.*;
 
 
 public class CommandLine
@@ -119,7 +119,7 @@ public class CommandLine
                     else
                     {
                         idToPlayer.get(playerId).deleteProgressWithId(id);
-                        progressS.deleteDB(id);
+                        progressS.deleteFromDB(id);
                     }
                 }
             }

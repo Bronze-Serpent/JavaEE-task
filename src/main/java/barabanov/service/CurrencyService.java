@@ -37,6 +37,20 @@ public class CurrencyService
     public void deleteFromDB(long id) throws SQLException { daoCurrency.delete(id); }
 
 
+    public static JSONObject currencyToJson(Currency currency)
+    {
+        JSONObject jsonCurrency = new JSONObject();
+
+        jsonCurrency.put("id", currency.getToken().getId());
+        jsonCurrency.put("playerId", currency.getToken().getPlayerId());
+        jsonCurrency.put("resourceId", currency.getToken().getResourceId());
+        jsonCurrency.put("name", currency.getName());
+        jsonCurrency.put("count", currency.getCount());
+
+        return jsonCurrency;
+    }
+
+
     public static List<Currency> jsonToCurrencies(JSONArray jArrCurrency)
     {
         List<Currency> currencies = new LinkedList<>();
@@ -52,21 +66,11 @@ public class CurrencyService
     }
 
 
-    public static JSONArray currenciesToJson(List<Currency> currencies)
+    public static JSONArray currencyToJson(List<Currency> currencies)
     {
         JSONArray jsonCurrenciesArr = new JSONArray();
         for (Currency currency : currencies)
-        {
-            JSONObject jsonCurrency = new JSONObject();
-
-            jsonCurrency.put("id", currency.getToken().getId());
-            jsonCurrency.put("playerId", currency.getToken().getPlayerId());
-            jsonCurrency.put("resourceId", currency.getToken().getResourceId());
-            jsonCurrency.put("name", currency.getName());
-            jsonCurrency.put("count", currency.getCount());
-
-            jsonCurrenciesArr.add(jsonCurrency);
-        }
+            jsonCurrenciesArr.add(currencyToJson(currency));
 
         return jsonCurrenciesArr;
     }

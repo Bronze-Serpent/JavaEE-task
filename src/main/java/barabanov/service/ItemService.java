@@ -37,6 +37,20 @@ public class ItemService
     public void deleteFromDB(long id) throws SQLException { daoItem.delete(id); }
 
 
+    public static JSONObject itemToJson(Item item)
+    {
+        JSONObject jsonItem = new JSONObject();
+
+        jsonItem.put("id", item.getToken().getId());
+        jsonItem.put("playerId", item.getToken().getPlayerId());
+        jsonItem.put("resourceId", item.getToken().getResourceId());
+        jsonItem.put("count", item.getCount());
+        jsonItem.put("level", item.getLevel());
+
+        return jsonItem;
+    }
+
+
     public static List<Item> jsonToItems(JSONArray jArrItem)
     {
         List<Item> items = new LinkedList<>();
@@ -52,21 +66,11 @@ public class ItemService
     }
 
 
-    public static JSONArray itemsToJson(List<Item> items)
+    public static JSONArray itemToJson(List<Item> items)
     {
         JSONArray jsonItemsArr = new JSONArray();
         for (Item item : items)
-        {
-            JSONObject jsonItem = new JSONObject();
-
-            jsonItem.put("id", item.getToken().getId());
-            jsonItem.put("playerId", item.getToken().getPlayerId());
-            jsonItem.put("resourceId", item.getToken().getResourceId());
-            jsonItem.put("count", item.getCount());
-            jsonItem.put("level", item.getLevel());
-
-            jsonItemsArr.add(jsonItem);
-        }
+            jsonItemsArr.add(itemToJson(item));
 
         return jsonItemsArr;
     }

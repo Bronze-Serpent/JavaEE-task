@@ -33,27 +33,32 @@ public class ProgressService
 
     public void updateDB(Progress p) throws SQLException { daoProgress.update(p);}
 
-    public void deleteDB(long id) throws SQLException { daoProgress.delete(id); }
+    public void deleteFromDB(long id) throws SQLException { daoProgress.delete(id); }
+
+
+    public static JSONObject progressToJson(Progress progress)
+    {
+        JSONObject jsonProgress = new JSONObject();
+
+        jsonProgress.put("id", progress.getToken().getId());
+        jsonProgress.put("playerId", progress.getToken().getPlayerId());
+        jsonProgress.put("resourceId", progress.getToken().getResourceId());
+        jsonProgress.put("score", progress.getScore());
+        jsonProgress.put("maxScore", progress.getMaxScore());
+
+        return jsonProgress;
+    }
 
 
     public static JSONArray progressesToJson(List<Progress> progresses)
     {
         JSONArray jsonProgressArr = new JSONArray();
         for (Progress progress : progresses)
-        {
-            JSONObject jsonProgress = new JSONObject();
-
-            jsonProgress.put("id", progress.getToken().getId());
-            jsonProgress.put("playerId", progress.getToken().getPlayerId());
-            jsonProgress.put("resourceId", progress.getToken().getResourceId());
-            jsonProgress.put("score", progress.getScore());
-            jsonProgress.put("maxScore", progress.getMaxScore());
-
-            jsonProgressArr.add(jsonProgress);
-        }
+            jsonProgressArr.add(progressToJson(progress));
 
         return jsonProgressArr;
     }
+
 
     public static List<Progress> jsonToProgresses(JSONArray jArrProgress)
     {
