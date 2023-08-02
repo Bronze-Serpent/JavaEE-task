@@ -16,7 +16,6 @@ public class CurrencyService
 
     private final DAOCurrency daoCurrency;
 
-
     public CurrencyService(DAOCurrency daoCurrency) { this.daoCurrency = daoCurrency; }
 
     public List<Currency> readAllWithPlId(long plId) throws SQLException { return daoCurrency.readAllWithPlId(plId); }

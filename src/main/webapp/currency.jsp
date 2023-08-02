@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<h1>Страница для управлением Currency</h1><br />
+<h1>Страница для управления Currency</h1><br />
 
 
 <h2>Создание нового currency</h2><br />
@@ -34,7 +34,7 @@
 
 <h2>Считывание currency</h2><br />
 
-<form method="post" action="${pageContext.request.contextPath}/CurReadServlet">
+<form method="get" action="${pageContext.request.contextPath}/CurReadServlet">
 
     <label><input type="number" name="id"></label>id<br>
     <input type="submit" value="Ok" name="Ok"><br>

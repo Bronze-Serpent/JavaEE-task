@@ -33,7 +33,7 @@
 
 <h2>Считывание player</h2><br />
 
-<form method="post" action="${pageContext.request.contextPath}/plReadServlet">
+<form method="get" action="${pageContext.request.contextPath}/plReadServlet">
 
     <label><input type="number" name="playerId"></label>playerID<br>
     <input type="submit" value="Ok" name="Ok"><br>

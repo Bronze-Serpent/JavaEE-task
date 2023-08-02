@@ -24,15 +24,16 @@ import static barabanov.ui.console.Checker.*;
 public class CommandLine
 {
 
-    private static final String url = "jdbc:postgresql://localhost:5432/java_task_1";
-    private static final String user = "postgres";
-    private static final String password = "87690";
+    private static final String PASSWORD_KEY = "db.password";
+    private static final String USERNAME_KEY = "db.username";
+    private static final String URL_KEY = "db.url";
 
 
     public static void main(String[] args) throws SQLException, IOException, ParseException
     {
-        try (Connection dbConnection = DriverManager.getConnection(url, user, password))
+        try (Connection dbConnection = DriverManager.getConnection(URL_KEY, USERNAME_KEY, PASSWORD_KEY))
         {
+            //Such creation of objects here, because no DI framework is used
             CurrencyService currencyS = new CurrencyService(new DAOCurrencyJDBC(dbConnection));
             ItemService itemS = new ItemService(new DAOItemJDBC(dbConnection));
             ProgressService progressS = new ProgressService(new DAOProgressJDBC(dbConnection));

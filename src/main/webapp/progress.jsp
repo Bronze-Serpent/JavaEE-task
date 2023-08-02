@@ -34,7 +34,7 @@
 
 <h2>Считывание progress</h2><br />
 
-<form method="post" action="${pageContext.request.contextPath}/ProgReadServlet">
+<form method="get" action="${pageContext.request.contextPath}/ProgReadServlet">
 
     <label><input type="number" name="id"></label>id<br>
     <input type="submit" value="Ok" name="Ok"><br>

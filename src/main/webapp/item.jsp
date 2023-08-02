@@ -34,7 +34,7 @@
 
 <h2>Считывание item</h2><br />
 
-<form method="post" action="${pageContext.request.contextPath}/itemReadServlet">
+<form method="get" action="${pageContext.request.contextPath}/itemReadServlet">
 
     <label><input type="number" name="id"></label>id<br>
     <input type="submit" value="Ok" name="Ok"><br>

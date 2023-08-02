@@ -16,7 +16,6 @@ public class ItemService
 
     private final DAOItem daoItem;
 
-
     public ItemService(DAOItem daoItem) { this.daoItem = daoItem; }
 
     public List<Item> readAllWithPlId(long plId) throws SQLException { return daoItem.readAllWithPlId(plId); }
