@@ -1,9 +1,9 @@
-package util;
+package com.barabanov.task.util;
 
-import com.barabanov.task_1.entity.Currency;
-import com.barabanov.task_1.entity.Item;
-import com.barabanov.task_1.entity.Player;
-import com.barabanov.task_1.entity.Progress;
+import com.barabanov.task.entity.Currency;
+import com.barabanov.task.entity.Item;
+import com.barabanov.task.entity.Player;
+import com.barabanov.task.entity.Progress;
 import lombok.experimental.UtilityClass;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy;

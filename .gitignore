@@ -1,3 +1,5 @@
 /target/
 /out/
 /Task_1.iml
+/.idea/
+/src/main/java/com/barabanov/task/Main.java

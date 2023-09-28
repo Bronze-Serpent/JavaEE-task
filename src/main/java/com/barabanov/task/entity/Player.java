@@ -1,4 +1,4 @@
-package com.barabanov.task_1.entity;
+package com.barabanov.task.entity;
 
 import jakarta.persistence.*;
 import lombok.*;

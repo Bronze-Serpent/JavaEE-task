@@ -1,6 +1,6 @@
-package com.barabanov.task_1.repository;
+package com.barabanov.task.repository;
 
-import com.barabanov.task_1.entity.Currency;
+import com.barabanov.task.entity.Currency;
 import jakarta.persistence.EntityManager;
 
 
@@ -10,4 +10,5 @@ public class CurrencyRepository extends PlayersThingRepository<Long, Currency>
     {
         super(entityManager, Currency.class);
     }
+
 }

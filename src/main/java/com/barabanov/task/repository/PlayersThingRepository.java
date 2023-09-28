@@ -1,6 +1,8 @@
-package com.barabanov.task_1.repository;
+package com.barabanov.task.repository;
 
-import com.barabanov.task_1.entity.BaseEntity;
+import com.barabanov.task.entity.BaseEntity;
+import com.barabanov.task.entity.Progress;
+import jakarta.persistence.EntityGraph;
 import jakarta.persistence.EntityManager;
 
 import java.io.Serializable;
@@ -28,5 +30,13 @@ public abstract class PlayersThingRepository <T extends Serializable, E extends 
 
         return getEntityManager().createQuery(criteria)
                 .getResultList();
+    }
+
+    public EntityGraph<Progress> getGraphWithPlayer()
+    {
+        EntityGraph<Progress> progressesWithPlayer = getEntityManager().createEntityGraph(Progress.class);
+        progressesWithPlayer.addAttributeNodes("player");
+
+        return progressesWithPlayer;
     }
 }

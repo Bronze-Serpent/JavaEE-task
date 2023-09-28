@@ -1,6 +1,6 @@
-package com.barabanov.task_1.repository;
+package com.barabanov.task.repository;
 
-import com.barabanov.task_1.entity.Progress;
+import com.barabanov.task.entity.Progress;
 import jakarta.persistence.EntityManager;
 
 public class ProgressRepository extends PlayersThingRepository<Long, Progress>
@@ -9,4 +9,5 @@ public class ProgressRepository extends PlayersThingRepository<Long, Progress>
     {
         super(entityManager, Progress.class);
     }
+
 }

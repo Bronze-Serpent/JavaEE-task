@@ -1,6 +1,6 @@
-package com.barabanov.task_1.repository;
+package com.barabanov.task.repository;
 
-import com.barabanov.task_1.entity.Item;
+import com.barabanov.task.entity.Item;
 import jakarta.persistence.EntityManager;
 
 
